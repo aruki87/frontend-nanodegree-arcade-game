@@ -1,3 +1,6 @@
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
+
 // Enemies player must avoid
 var Enemy = function(x, y, width, height, speed) {
     this.x = x;
@@ -9,8 +12,10 @@ var Enemy = function(x, y, width, height, speed) {
     this.originalY = y;
 };
 
+// Checks if player has made contact with an enemy object
 // Updates each enemies position
 Enemy.prototype.update = function(dt) {
+    this.checkCollisions(allEnemies);
     if (this.x >= 505) {
         this.reset();
     } else {
@@ -20,8 +25,8 @@ Enemy.prototype.update = function(dt) {
 
 // Reset method for enemy after reaching right-side of canvas
 Enemy.prototype.reset = function() {
-        this.x = Math.random() * -45;
-        this.y = this.originalY;
+    this.x = Math.random() * -45;
+    this.y = this.originalY;
 };
 
 // Draws the enemy on the screen
@@ -41,21 +46,19 @@ Player.prototype.render = function() {
 };
 
 // Checks if player has made contact with an enemy object
-Player.prototype.checkCollisions = function(enemiesList) {
-        for (var i = 0; i < enemiesList.length; i++) {
-            var playerTop = this.y;
-            var playerBottom = this.y + 70;
-            var playerRight = this.x + 98;
-            var playerLeft = this.x;
-            var enemyTop = enemiesList[i].y;
-            var enemyBottom = enemiesList[i].y + 70;
-            var enemyRight = enemiesList[i].x + 70;
-            var enemyLeft = enemiesList[i].x + 35 ;
-            if ((playerTop <= enemyBottom) && (playerBottom >= enemyTop) && (playerLeft <= enemyRight) && (playerRight >= enemyLeft)) {
-                player.reset();
-                allEnemiesReset();
-                }
-            }
+Enemy.prototype.checkCollisions = function() {
+    var playerTop = player.y;
+    var playerBottom = player.y + 70;
+    var playerRight = player.x + 98;
+    var playerLeft = player.x;
+    var enemyTop = this.y;
+    var enemyBottom = this.y + 70;
+    var enemyRight = this.x + 70;
+    var enemyLeft = this.x + 35 ;
+    if ((playerTop <= enemyBottom) && (playerBottom >= enemyTop) && (playerLeft <= enemyRight) && (playerRight >= enemyLeft)) {
+        player.reset();
+        allEnemiesReset();
+        }
     };
 
 
@@ -65,31 +68,28 @@ Player.prototype.reset = function() {
     this.y = 400;
 };
 
-// Checks if player has made contact with an enemy object
-Player.prototype.update = function(dt) {
-    this.checkCollisions(allEnemies);
-};
+
 
 // Handles input and moves character on screen
 Player.prototype.handleInput = function(code) {
 
             if (code === 'up') {
-                this.y -= 83;
+                this.y -= TILE_HEIGHT;
 
             if (this.y < 0) {
-                player.reset();
+                this.reset();
                 allEnemiesReset();
             }
             }
 
-            if ((code === 'down') && ((this.y + 83) < 415) ) {
-                this.y += 83;
+            if ((code === 'down') && ((this.y + TILE_HEIGHT) < 415) ) {
+                this.y += TILE_HEIGHT;
             }
             if ((code === 'left') && (this.x > 0) ) {
-                this.x -= 101;
+                this.x -= TILE_WIDTH;
             }
             if ((code === 'right') && (this.x < 404) ) {
-                this.x += 101;
+                this.x += TILE_WIDTH;
             }
 };
 
