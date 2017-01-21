@@ -15,7 +15,7 @@ var Enemy = function(x, y, width, height, speed) {
 // Checks if player has made contact with an enemy object
 // Updates each enemies position
 Enemy.prototype.update = function(dt) {
-    this.checkCollisions(allEnemies);
+    this.checkCollisions();
     if (this.x >= 505) {
         this.reset();
     } else {
